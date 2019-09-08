@@ -23,5 +23,17 @@ pipeline {
         sh 'py.test --verbose --junit-xml test-reports/results.xml sources/test_calc.py'
       }
     }
+    stage('Deliver') {
+      agent {
+        docker {
+          image 'cdrx/pyinstaller-linux:python2'
+        }
+
+      }
+      steps {
+        input '"Proceed" for continue'
+        sh 'pyinstaller --onefile sources/add2vals.py'
+      }
+    }
   }
 }
